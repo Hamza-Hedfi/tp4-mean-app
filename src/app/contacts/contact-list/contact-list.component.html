@@ -1,0 +1,14 @@
+<mat-accordion *ngIf="contacts.length > 0">
+  <mat-expansion-panel *ngFor="let contact of contacts">
+    <mat-expansion-panel-header>
+      {{ contact.name }}
+    </mat-expansion-panel-header>
+    <p>{{ contact.email }}</p>
+    <p>{{ contact.phone }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">EDIT</button>
+      <button mat-button color="warn">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="mat-body-1 info-text" *ngIf="contacts.length == 0">No contacts added yet!</p>

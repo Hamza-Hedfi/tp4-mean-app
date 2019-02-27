@@ -1,0 +1,57 @@
+<mat-card>
+  <form (submit)="onAddContact(contactForm)" #contactForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="name"
+        placeholder="Name"
+        required
+        ngModel
+        #name="ngModel"
+        [(ngModel)]="value"
+      />
+      <mat-error *ngIf="name.invalid"
+        >Please enter a name for the contact</mat-error
+      >
+      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="email"
+        name="email"
+        placeholder="E-mail"
+        required
+        ngModel
+        #email="ngModel"
+      />
+      <mat-icon matSuffix>mode_edit</mat-icon>
+      <mat-error *ngIf="name.invalid"
+        >Please enter an email for the contact</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <span matPrefix>+216 &nbsp;</span>
+      <input
+        type="tel"
+        matInput
+        placeholder="Telephone"
+        name="phone"
+        pattern="[0-9]{2} [0-9]{3} [0-9]{3}"
+        required
+        ngModel
+        #phone="ngModel"
+      />
+      <mat-icon matSuffix>phone</mat-icon>
+      <mat-error *ngIf="phone.invalid"
+        >Please enter a phone number for the contact</mat-error
+      >
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">
+      Save Contact
+    </button>
+  </form>
+</mat-card>

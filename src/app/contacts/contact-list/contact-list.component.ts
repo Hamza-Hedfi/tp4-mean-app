@@ -32,7 +32,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
   private contactSub: Subscription;
 
   ngOnInit() {
-    this.contacts = this.contactsService.getContacts();
+    this.contactsService.getContacts();
     this.contactSub = this.contactsService
       .getContactUpdateListener()
       .subscribe((contacts: Contact[]) => {

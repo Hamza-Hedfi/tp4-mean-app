@@ -24,7 +24,7 @@ export class ContactsService {
             email: contact.email,
             phone: contact.phone,
             id: contact._id
-          }
+          };
         });
       }))
       .subscribe(contacts => {
@@ -52,7 +52,7 @@ export class ContactsService {
   deleteContact(contactId: string) {
     this.http.delete('http://localhost:3000/api/contacts/' + contactId)
       .subscribe(() => {
-        const updatedContacts = this.contacts.filter(contact => contact.id != contactId);
+        const updatedContacts = this.contacts.filter(contact => contact.id !== contactId);
         this.contacts = updatedContacts;
         this.contactUpdated.next([...this.contacts]);
       });

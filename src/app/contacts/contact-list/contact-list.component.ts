@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material';
 
 import { Contact } from '../contact.model';
 import { ContactsService } from '../contacts.service';
@@ -10,7 +11,7 @@ import { ContactsService } from '../contacts.service';
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent implements OnInit, OnDestroy {
-  constructor(public contactsService: ContactsService) {}
+
   // contacts = [
   //   {
   //     name: 'Hamza Hedfi',
@@ -29,19 +30,39 @@ export class ContactListComponent implements OnInit, OnDestroy {
   //   }
   // ];
   contacts: Contact[] = [];
+  isLoading = false;
+  totalContacts = 0;
+  contactsPerPage = 5;
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10];
   private contactSub: Subscription;
 
+  constructor(public contactsService: ContactsService) {}
+
   ngOnInit() {
-    this.contactsService.getContacts();
+    this.isLoading = true;
+    this.contactsService.getContacts(this.contactsPerPage, this.currentPage);
     this.contactSub = this.contactsService
       .getContactUpdateListener()
-      .subscribe((contacts: Contact[]) => {
-        this.contacts = contacts;
+      .subscribe((contactData: {contacts: Contact[], contactCount: number}) => {
+        this.isLoading = false;
+        this.totalContacts = contactData.contactCount;
+        this.contacts = contactData.contacts;
       });
   }
 
+  onChangedPage(pageData: PageEvent) {
+    this.isLoading = true;
+    this.currentPage = pageData.pageIndex + 1;
+    this.contactsPerPage = pageData.pageSize;
+    this.contactsService.getContacts(this.contactsPerPage, this.currentPage);
+  }
+
   onDelete(contactId: string) {
-    this.contactsService.deleteContact(contactId);
+    this.isLoading = true;
+    this.contactsService.deleteContact(contactId).subscribe(() => {
+      this.contactsService.getContacts(this.contactsPerPage, this.currentPage);
+    });
   }
 
   ngOnDestroy() {

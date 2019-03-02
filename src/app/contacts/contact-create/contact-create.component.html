@@ -1,52 +1,47 @@
 <mat-card>
-  <form (submit)="onAddContact(contactForm)" #contactForm="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form
+    [formGroup]="form"
+    (submit)="onSaveContact()"
+    *ngIf="!isLoading"
+  >
     <mat-form-field>
       <input
         matInput
         type="text"
-        name="name"
+        formControlName="name"
         placeholder="Name"
-        required
-        ngModel
-        #name="ngModel"
-        [(ngModel)]="value"
       />
-      <mat-error *ngIf="name.invalid"
+      <mat-error *ngIf="form.get('name').invalid"
         >Please enter a name for the contact</mat-error
       >
-      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-        <mat-icon>close</mat-icon>
-      </button>
     </mat-form-field>
+    <div>
+      <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Image</button>
+      <input type="file" #filePicker (change)="onImagePicked($event)"/>
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+      <img [src]="imagePreview" [alt]="form.value.name">
+    </div>
     <mat-form-field>
       <input
         matInput
         type="email"
-        name="email"
+        formControlName="email"
         placeholder="E-mail"
-        required
-        ngModel
-        #email="ngModel"
       />
-      <mat-icon matSuffix>mode_edit</mat-icon>
-      <mat-error *ngIf="name.invalid"
+      <mat-error *ngIf="form.get('email').invalid"
         >Please enter an email for the contact</mat-error
       >
     </mat-form-field>
     <mat-form-field>
-      <span matPrefix>+216 &nbsp;</span>
       <input
         type="tel"
         matInput
         placeholder="Telephone"
-        name="phone"
-        pattern="[0-9]{2} [0-9]{3} [0-9]{3}"
-        required
-        ngModel
-        #phone="ngModel"
+        formControlName="phone"
       />
-      <mat-icon matSuffix>phone</mat-icon>
-      <mat-error *ngIf="phone.invalid"
+      <mat-error *ngIf="form.get('phone').invalid"
         >Please enter a phone number for the contact</mat-error
       >
     </mat-form-field>
